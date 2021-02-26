@@ -16,6 +16,22 @@ export default function Upload() {
     var r = new FileReader();
     r.readAsBinaryString(file);
     var data;
+    async function postData(url = "", data = {}) {
+      try {
+        let response = await fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/octet-stream"
+          },
+          body: data
+        });
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     r.onload = () => {
       data = r.result;
       console.log(data);
@@ -24,18 +40,12 @@ export default function Upload() {
 
       formData.append("image-file", data);
 
-      fetch("http://3.236.97.79:8080/predictions/densenet161", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/octet-stream" },
-        body: formData
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          console.log(json);
-        });
+      postData(
+        "http://3.236.97.79:8080/predictions/densenet161",
+        formData
+      ).then(data => {
+        console.log(data);
+      });
     };
   };
   return (
