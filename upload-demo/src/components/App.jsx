@@ -25,7 +25,7 @@ export default function Upload() {
           body: data
         }
       );
-      return await response.data;
+      return await response; // an opaque response
     }
     postData(file).then(response => {
       console.log(response);
