@@ -1,0 +1,20 @@
+.button {
+  cursor: pointer;
+  background: #ff5d6c;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+}
+
+input {
+  position: absolute;
+  left: -99999999px;
+}
+
+button {
+  height: 2rem;
+  background: #ff5d6c;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+}
