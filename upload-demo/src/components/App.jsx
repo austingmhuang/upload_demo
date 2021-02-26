@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 import "../styles/upload.css";
 
 export default function Upload() {
@@ -13,39 +12,26 @@ export default function Upload() {
   // Call a function (passed as a prop from the parent component) to handle the user-selected file
   const handleChange = event => {
     const file = event.target.files[0];
-    console.log(file);
-    var r = new FileReader();
-    r.readAsBinaryString(file);
 
-    r.onload = () => {
-      let data = r.result;
-      console.log(data);
-      // const formData = new FormData();
-      // formData.append("image-file", data);
-
-      postData("http://3.236.97.79:8080/predictions/densenet161", data).then(
-        data => {
-          console.log(data);
-        }
-      );
-    };
-
-    async function postData(url = "", data) {
-      try {
-        let response = await fetch(url, {
+    async function postData(data) {
+      const response = await fetch(
+        "http://3.236.97.79:8080/predictions/densenet161",
+        {
           method: "POST",
           mode: "no-cors",
           headers: {
-            "Content-Type": "application/octet-stream"
+            "Content-Type": "image/jpeg"
           },
           body: data
-        });
-        return await response.json();
-      } catch (error) {
-        console.log(error);
-      }
+        }
+      );
+      return await response.data;
     }
+    postData(file).then(response => {
+      console.log(response);
+    });
   };
+
   return (
     <>
       <button onClick={handleClick}>Upload a file</button>
