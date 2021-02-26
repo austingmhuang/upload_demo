@@ -1,6 +1,8 @@
 #How to run
 
-cd upload_demo
+In terminal:
+
+cd upload-demo
 
 yarn install
 
