@@ -13,10 +13,24 @@ export default function Upload() {
   // Call a function (passed as a prop from the parent component) to handle the user-selected file
   const handleChange = event => {
     const file = event.target.files[0];
+    console.log(file);
     var r = new FileReader();
     r.readAsBinaryString(file);
-    var data;
-    async function postData(url = "", data = {}) {
+
+    r.onload = () => {
+      let data = r.result;
+      console.log(data);
+      // const formData = new FormData();
+      // formData.append("image-file", data);
+
+      postData("http://3.236.97.79:8080/predictions/densenet161", data).then(
+        data => {
+          console.log(data);
+        }
+      );
+    };
+
+    async function postData(url = "", data) {
       try {
         let response = await fetch(url, {
           method: "POST",
@@ -31,22 +45,6 @@ export default function Upload() {
         console.log(error);
       }
     }
-
-    r.onload = () => {
-      data = r.result;
-      console.log(data);
-
-      const formData = new FormData();
-
-      formData.append("image-file", data);
-
-      postData(
-        "http://3.236.97.79:8080/predictions/densenet161",
-        formData
-      ).then(data => {
-        console.log(data);
-      });
-    };
   };
   return (
     <>
