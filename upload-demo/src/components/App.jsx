@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../styles/upload.css";
 
 export default function App() {
+  const fileReader = new FileReader();
+
   const [dataResp, setDataResp] = useState("");
+  const [inputImage, setInputImage] = useState();
 
   // Create a reference to the hidden file input element
   const hiddenFileInput = React.useRef(null);
@@ -14,6 +17,15 @@ export default function App() {
   // Call a function (passed as a prop from the parent component) to handle the user-selected file
   const handleChange = event => {
     const file = event.target.files[0];
+    console.log(file);
+    let image;
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      const data = fileReader.result;
+      image = new FormData();
+      image.append("image-file", data);
+      setInputImage(image.get("image-file"));
+    };
 
     async function postData(data) {
       const response = await fetch(
@@ -44,6 +56,7 @@ export default function App() {
         onChange={handleChange}
         style={{ display: "none" }} /* Make the file input element invisible */
       />
+      <img src={inputImage}></img>
       {dataResp}
     </>
   );
