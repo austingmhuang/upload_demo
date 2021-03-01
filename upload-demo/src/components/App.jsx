@@ -17,7 +17,6 @@ export default function App() {
   // Call a function (passed as a prop from the parent component) to handle the user-selected file
   const handleChange = event => {
     const file = event.target.files[0];
-    console.log(file);
     let image;
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
@@ -41,7 +40,6 @@ export default function App() {
       return await response.json();
     }
     postData(file).then(response => {
-      console.log(response);
       console.log(Object.keys(response)[0]);
       setDataResp(Object.keys(response)[0]);
     });
