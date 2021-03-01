@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/upload.css";
 
-export default function Upload() {
+export default function App() {
+  const [dataResp, setDataResp] = useState("");
+
   // Create a reference to the hidden file input element
   const hiddenFileInput = React.useRef(null);
 
@@ -28,6 +30,8 @@ export default function Upload() {
     }
     postData(file).then(response => {
       console.log(response);
+      console.log(Object.keys(response)[0]);
+      setDataResp(Object.keys(response)[0]);
     });
   };
 
@@ -40,6 +44,7 @@ export default function Upload() {
         onChange={handleChange}
         style={{ display: "none" }} /* Make the file input element invisible */
       />
+      {dataResp}
     </>
   );
 }
