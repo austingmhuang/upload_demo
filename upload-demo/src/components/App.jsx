@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/upload.css";
+import Background from "./Background";
+import Title from "./Title";
 
 export default function App() {
   const fileReader = new FileReader();
@@ -40,7 +42,6 @@ export default function App() {
       return await response.json();
     }
     postData(file).then(response => {
-      console.log(Object.keys(response)[0]);
       setDataResp(Object.keys(response)[0]);
     });
   };
@@ -56,6 +57,9 @@ export default function App() {
       />
       <img src={inputImage}></img>
       {dataResp}
+      <Background image={inputImage}>
+        <Title text="tabby" />
+      </Background>
     </>
   );
 }
