@@ -54,8 +54,8 @@ export default function App() {
        * accessing the canvas. But for now this works so I will leave it like this...
        */
       let canvasElement = document.createElement("canvas");
-      canvasElement.width = 140;
-      canvasElement.height = 140;
+      canvasElement.width = imgWidth;
+      canvasElement.height = imgHeight;
       let canvas = canvasElement.getContext("2d");
       canvas.fillStyle = "#00FFFF";
       canvas.textAlign = "center";
