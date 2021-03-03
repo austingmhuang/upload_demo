@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../styles/upload.css";
-import Canvas from "./Canvas";
+// import Canvas from "./Canvas";
 import Background from "./Background";
 import Title from "./Title";
+import mergeImages from "merge-images";
+import dude from "./7.png";
+import dudette from "./8.png";
 
 export default function App() {
   const fileReader = new FileReader();
+
+  let textImage = new Image();
 
   const [dataResp, setDataResp] = useState("");
   const [inputImage, setInputImage] = useState();
@@ -26,7 +31,6 @@ export default function App() {
       const data = fileReader.result;
       image = new FormData();
       image.append("image-file", data);
-      setInputImage(image.get("image-file"));
     };
 
     async function postData(data) {
@@ -43,7 +47,19 @@ export default function App() {
       return await response.json();
     }
     postData(file).then(response => {
-      setDataResp(Object.keys(response)[0]);
+      let canvasElement = document.createElement("canvas");
+      canvasElement.width = 100;
+      canvasElement.height = 100;
+      let canvas = canvasElement.getContext("2d");
+      canvas.fillStyle = "#f6d021";
+      canvas.textAlign = "center";
+      canvas.textBaseline = "middle";
+      canvas.font = "15px Arial";
+      canvas.fillText(Object.keys(response)[0], 50, 10);
+      textImage.src = canvas.canvas.toDataURL();
+      mergeImages([image.get("image-file"), textImage.src]).then(b64 =>
+        setInputImage(b64)
+      );
     });
   };
 
@@ -57,8 +73,6 @@ export default function App() {
         style={{ display: "none" }} /* Make the file input element invisible */
       />
       <img src={inputImage}></img>
-      {dataResp}
-      <Canvas />
     </>
   );
 }

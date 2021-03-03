@@ -18,6 +18,8 @@
     "@testing-library/user-event": "^7.1.2",
     "aws-sdk": "^2.610.0",
     "axios": "^0.21.1",
+    "canvas": "^2.7.0",
+    "merge-images": "^2.0.0",
     "path": "^0.12.7",
     "prop-types": "^15.6.0",
     "react": "^16.12.0",
