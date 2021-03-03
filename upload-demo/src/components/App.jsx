@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/upload.css";
+import Canvas from "./Canvas";
 import Background from "./Background";
 import Title from "./Title";
 
@@ -57,9 +58,7 @@ export default function App() {
       />
       <img src={inputImage}></img>
       {dataResp}
-      <Background image={inputImage}>
-        <Title text="tabby" />
-      </Background>
+      <Canvas />
     </>
   );
 }
