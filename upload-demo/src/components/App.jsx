@@ -1,18 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/upload.css";
-// import Canvas from "./Canvas";
-import Background from "./Background";
-import Title from "./Title";
 import mergeImages from "merge-images";
-import dude from "./7.png";
-import dudette from "./8.png";
 
 export default function App() {
   const fileReader = new FileReader();
 
   let textImage = new Image();
 
-  const [dataResp, setDataResp] = useState("");
   const [inputImage, setInputImage] = useState();
 
   // Create a reference to the hidden file input element
@@ -26,9 +20,17 @@ export default function App() {
   const handleChange = event => {
     const file = event.target.files[0];
     let image;
+    let imgHeight;
+    let imgWidth;
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       const data = fileReader.result;
+      const forImgHeight = new Image();
+      forImgHeight.src = data;
+      forImgHeight.onload = () => {
+        imgWidth = forImgHeight.naturalWidth;
+        imgHeight = forImgHeight.naturalHeight;
+      };
       image = new FormData();
       image.append("image-file", data);
     };
@@ -47,16 +49,21 @@ export default function App() {
       return await response.json();
     }
     postData(file).then(response => {
+      /**
+       * All this code below here is very weird. I will try to write a more concise and "react" way of
+       * accessing the canvas. But for now this works so I will leave it like this...
+       */
       let canvasElement = document.createElement("canvas");
-      canvasElement.width = 100;
-      canvasElement.height = 100;
+      canvasElement.width = 140;
+      canvasElement.height = 140;
       let canvas = canvasElement.getContext("2d");
-      canvas.fillStyle = "#f6d021";
+      canvas.fillStyle = "#00FFFF";
       canvas.textAlign = "center";
       canvas.textBaseline = "middle";
       canvas.font = "15px Arial";
-      canvas.fillText(Object.keys(response)[0], 50, 10);
+      canvas.fillText(Object.keys(response)[0], imgWidth / 2, imgHeight - 50);
       textImage.src = canvas.canvas.toDataURL();
+
       mergeImages([image.get("image-file"), textImage.src]).then(b64 =>
         setInputImage(b64)
       );
