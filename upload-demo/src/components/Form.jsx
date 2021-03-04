@@ -2,19 +2,43 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import mergeImages from "merge-images";
 
+async function postData(data, ipAddress, port, model) {
+  try {
+    const response = await fetch(
+      `http://${ipAddress}:${port}/predictions/${model}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: data
+      }
+    );
+
+    return await response.json();
+  } catch (error) {
+    alert(error);
+  }
+}
+
 function Form() {
   const { register, handleSubmit, errors } = useForm();
 
+  let textImage = new Image();
+
+  const [inputImage, setInputImage] = useState();
+
   const onSubmit = event => {
-    const file = event.image[0];
     let ipAddress = event.ipAddress;
     let port = event.port;
     let model = event.model;
-
-    console.log(file, ipAddress, port, model);
     let image;
     let imgHeight;
     let imgWidth;
+
+    const file = event.image[0];
+
+    const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       const data = fileReader.result;
@@ -49,25 +73,6 @@ function Form() {
       );
     });
   };
-  const fileReader = new FileReader();
-
-  let textImage = new Image();
-
-  const [inputImage, setInputImage] = useState();
-
-  async function postData(data, ipAddress, port, model) {
-    const response = await fetch(
-      `http://${ipAddress}:${port}/predictions/${model}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "image/jpeg"
-        },
-        body: data
-      }
-    );
-    return await response.json();
-  }
 
   return (
     <div className="wrapper">
