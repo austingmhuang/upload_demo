@@ -1,25 +1,17 @@
 import React, { useState } from "react";
-import "../styles/upload.css";
+import { useForm } from "react-hook-form";
 import mergeImages from "merge-images";
 
-export default function Upload({ ipAddress, port, model }) {
-  console.log(ipAddress, model, port);
-  const fileReader = new FileReader();
+function Form() {
+  const { register, handleSubmit, errors } = useForm();
 
-  let textImage = new Image();
+  const onSubmit = event => {
+    const file = event.image[0];
+    let ipAddress = event.ipAddress;
+    let port = event.port;
+    let model = event.model;
 
-  const [inputImage, setInputImage] = useState();
-
-  // Create a reference to the hidden file input element
-  const hiddenFileInput = React.useRef(null);
-
-  // Programatically click the hidden file input element when the Button component is clicked
-  const handleClick = event => {
-    hiddenFileInput.current.click();
-  };
-  // Call a function (passed as a prop from the parent component) to handle the user-selected file
-  const handleChange = event => {
-    const file = event.target.files[0];
+    console.log(file, ipAddress, port, model);
     let image;
     let imgHeight;
     let imgWidth;
@@ -35,7 +27,8 @@ export default function Upload({ ipAddress, port, model }) {
       image = new FormData();
       image.append("image-file", data);
     };
-    postData(file).then(response => {
+
+    postData(file, ipAddress, port, model).then(response => {
       /**
        * All this code below here is very weird. I will try to write a more concise and "react" way of
        * accessing the canvas. But for now this works so I will leave it like this...
@@ -56,10 +49,15 @@ export default function Upload({ ipAddress, port, model }) {
       );
     });
   };
+  const fileReader = new FileReader();
 
-  async function postData(data) {
+  let textImage = new Image();
+
+  const [inputImage, setInputImage] = useState();
+
+  async function postData(data, ipAddress, port, model) {
     const response = await fetch(
-      "http://3.236.97.79:8080/predictions/densenet161",
+      `http://${ipAddress}:${port}/predictions/${model}`,
       {
         method: "POST",
         headers: {
@@ -72,15 +70,40 @@ export default function Upload({ ipAddress, port, model }) {
   }
 
   return (
-    <>
-      <button onClick={handleClick}>Upload a file</button>
-      <input
-        type="file"
-        ref={hiddenFileInput}
-        onChange={handleChange}
-        style={{ display: "none" }} /* Make the file input element invisible */
-      />
+    <div className="wrapper">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="text"
+          placeholder="IP Address"
+          name="ipAddress"
+          ref={register({ required: true })}
+        />
+        {errors.ipAddress && <span>Need IP Address</span>}
+        <input
+          type="text"
+          placeholder="Port"
+          name="port"
+          ref={register({ required: true })}
+        />
+        {errors.port && <span>Need port</span>}
+        <input
+          type="text"
+          placeholder="MLModel"
+          name="model"
+          ref={register({ required: true })}
+        />
+        {errors.model && <span>Need Model</span>}
+        <input
+          type="file"
+          name="image"
+          accept="image/png, image/jpeg"
+          ref={register({ required: true })}
+        />
+        <input type="submit" />
+      </form>
       <img src={inputImage}></img>
-    </>
+    </div>
   );
 }
+
+export default Form;
