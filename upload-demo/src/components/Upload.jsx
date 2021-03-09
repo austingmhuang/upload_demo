@@ -26,8 +26,7 @@ export default function Upload({ ipAddress, port, model }) {
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       const videoURL = fileReader.result;
-      extractFramesFromVideo(videoURL).then(res => console.log(res));
-      console.log(frames);
+      extractFramesFromVideo(videoURL).then(res => (frames = res));
     };
   };
 

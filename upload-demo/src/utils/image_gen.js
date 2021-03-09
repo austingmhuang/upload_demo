@@ -9,8 +9,6 @@ export default async function extractFramesFromVideo(videoURL, fps = 25) {
 
     video.src = videoURL;
 
-    console.log(video.readyState);
-
     while (
       (video.duration === Infinity || isNaN(video.duration)) &&
       video.readyState < 2
@@ -27,20 +25,21 @@ export default async function extractFramesFromVideo(videoURL, fps = 25) {
     canvas.height = h;
 
     let frames = [];
-    let interval = 1 / fps;
+    let interval = 1;
     let currentTime = 0;
 
     while (currentTime < duration) {
       video.currentTime = currentTime;
-      await new Promise(r => seekResolve);
+      await new Promise(r => (seekResolve = r));
 
       context.drawImage(video, 0, 0, w, h);
       let base64ImageData = canvas.toDataURL();
       frames.push(base64ImageData);
-
+      console.log(duration);
+      console.log(currentTime);
       currentTime += interval;
     }
-    console.log(frames);
+    console.log("done");
     resolve(frames);
   });
 }
