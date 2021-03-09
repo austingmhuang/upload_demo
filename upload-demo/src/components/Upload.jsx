@@ -9,6 +9,8 @@ export default function Upload({ ipAddress, port, model }) {
 
   let textImage = new Image();
 
+  let frames;
+
   const [inputImage, setInputImage] = useState();
 
   // Create a reference to the hidden file input element
@@ -21,12 +23,14 @@ export default function Upload({ ipAddress, port, model }) {
   // Call a function (passed as a prop from the parent component) to handle the user-selected file
   const handleChange = event => {
     const file = event.target.files[0];
-    let frames;
 
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       const videoURL = fileReader.result;
-      extractFramesFromVideo(videoURL).then(res => (frames = res));
+      extractFramesFromVideo(videoURL).then(res => {
+        frames = res;
+        console.log(frames);
+      });
     };
   };
 
