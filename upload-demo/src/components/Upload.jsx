@@ -4,10 +4,7 @@ import mergeImages from "merge-images";
 import extractFramesFromVideo from "../utils/image_gen";
 
 export default function Upload({ ipAddress, port, model }) {
-  console.log(ipAddress, model, port);
   const fileReader = new FileReader();
-
-  let textImage = new Image();
 
   let frames;
 
@@ -29,23 +26,56 @@ export default function Upload({ ipAddress, port, model }) {
       const videoURL = fileReader.result;
       extractFramesFromVideo(videoURL).then(res => {
         frames = res;
-        console.log(frames);
+        for (let i = 0; i < frames.length; i++) {
+          postData(frames[i]).then(res => {
+            console.log("poop");
+          });
+        }
       });
     };
   };
 
   async function postData(data) {
-    const response = await fetch(
-      "http://3.236.97.79:8080/predictions/densenet161",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "image/jpeg"
-        },
-        body: data
-      }
-    );
-    return await response.json();
+    let imageFile = dataURItoFile(data);
+    console.log(imageFile);
+    try {
+      const response = await fetch(
+        `http://3.236.97.79:8080/predictions/densenet161`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "image/jpeg"
+          },
+          body: imageFile
+        }
+      );
+
+      return await response.json();
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  function dataURItoFile(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    let byteString = atob(dataURI.split(",")[1]);
+
+    // separate out the mime component
+    let mimeString = dataURI
+      .split(",")[0]
+      .split(":")[1]
+      .split(";")[0];
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    let file = new File(ia, "image.png", { type: mimeString });
+    return file;
   }
 
   return (

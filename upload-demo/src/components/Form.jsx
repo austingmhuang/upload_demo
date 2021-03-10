@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import mergeImages from "merge-images";
 
 async function postData(data, ipAddress, port, model) {
+  console.log(data);
   try {
     const response = await fetch(
       `http://${ipAddress}:${port}/predictions/${model}`,
