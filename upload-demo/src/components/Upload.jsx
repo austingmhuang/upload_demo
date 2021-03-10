@@ -88,7 +88,7 @@ export default function Upload({ ipAddress, port, model }) {
 
   return (
     <>
-      <button onClick={handleClick}>Upload a file</button>
+      <button onClick={handleClick}>Upload a video</button>
       <input
         type="file"
         ref={hiddenFileInput}
