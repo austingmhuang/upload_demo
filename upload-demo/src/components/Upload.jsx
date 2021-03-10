@@ -27,11 +27,9 @@ export default function Upload({ ipAddress, port, model }) {
       extractFramesFromVideo(videoURL).then(res => {
         frames = res;
         for (let i = 0; i < frames.length; i++) {
-          postData(frames[i]).then(res => {
-            console.log("poop");
-          });
+          postData(frames[i]).then(res => {});
         }
-        setInputImage(frames[0]);
+        setInputImage(frames[2]);
       });
     };
   };
@@ -45,7 +43,7 @@ export default function Upload({ ipAddress, port, model }) {
 
   async function postData(data) {
     let imageFile = dataURItoFile(data);
-    console.log(imageFile);
+
     try {
       const response = await fetch(
         `http://3.236.97.79:8080/predictions/densenet161`,
@@ -76,13 +74,13 @@ export default function Upload({ ipAddress, port, model }) {
       .split(";")[0];
 
     // write the bytes of the string to an ArrayBuffer
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    let file = new File(ia, "image.png", { type: mimeString });
+    let file = new File([ab], "image.png", { type: mimeString });
     return file;
   }
 

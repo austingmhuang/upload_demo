@@ -2,7 +2,7 @@
  *
  * @param { Takes in a dataURL for a video } videoURL
  * @returns Returns a promise that will resolve to an array of
- * pngs in B64 Format of the frames.
+ * pngs in dataURL Format of the frames.
  * Currently hard-coded to be
  * 0.333 frames per second, but that can be adjusted.
  */
@@ -34,7 +34,7 @@ export default async function extractFramesFromVideo(videoURL) {
     canvas.height = h;
 
     let frames = [];
-    let interval = 3;
+    let interval = 300;
     let currentTime = 0;
 
     while (currentTime < duration) {
