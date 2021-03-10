@@ -1,4 +1,13 @@
-export default async function extractFramesFromVideo(videoURL, fps = 25) {
+/**
+ *
+ * @param { Takes in a dataURL for a video } videoURL
+ * @returns Returns a promise that will resolve to an array of
+ * pngs in B64 Format of the frames.
+ * Currently hard-coded to be
+ * 0.333 frames per second, but that can be adjusted.
+ */
+
+export default async function extractFramesFromVideo(videoURL) {
   return new Promise(async resolve => {
     let video = document.createElement("video");
 

@@ -31,9 +31,17 @@ export default function Upload({ ipAddress, port, model }) {
             console.log("poop");
           });
         }
+        setInputImage(frames[0]);
       });
     };
   };
+
+  /**
+   * @param {Takes in a File, which in this case is an image} data
+   *
+   * Sends data to written server, and will return its response in JSON format.
+   * This response is an object like such: {"Key":Value}
+   */
 
   async function postData(data) {
     let imageFile = dataURItoFile(data);
