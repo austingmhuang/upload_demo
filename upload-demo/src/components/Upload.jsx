@@ -58,7 +58,9 @@ export default function Upload({ ipAddress, port, model }) {
 
       return await response.json();
     } catch (error) {
-      alert(error);
+      console.log("bababbabababa");
+    } finally {
+      return { "ML FAILED": 100 };
     }
   }
 

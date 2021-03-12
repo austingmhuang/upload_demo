@@ -26,7 +26,8 @@
     "react-dom": "^16.12.0",
     "react-hook-form": "^6.15.4",
     "react-modal-image": "^2.5.0",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^4.0.3",
+    "videoshow": "^0.1.12"
   },
   "devDependencies": {
     "enzyme": "^3.9.0",
