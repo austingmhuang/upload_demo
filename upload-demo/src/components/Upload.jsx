@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/upload.css";
 import mergeImages from "merge-images";
 import extractFramesFromVideo from "../utils/image_gen";
+import dataURItoFile from "../utils/dataToURIFile";
 
 export default function Upload({ ipAddress, port, model }) {
   const fileReader = new FileReader();
@@ -27,7 +28,9 @@ export default function Upload({ ipAddress, port, model }) {
       extractFramesFromVideo(videoURL).then(res => {
         frames = res;
         for (let i = 0; i < frames.length; i++) {
-          postData(frames[i]).then(res => {});
+          postData(frames[i]).then(res => {
+            console.log(res);
+          });
         }
         setInputImage(frames[2]);
       });
@@ -58,32 +61,8 @@ export default function Upload({ ipAddress, port, model }) {
 
       return await response.json();
     } catch (error) {
-      console.log("bababbabababa");
-    } finally {
-      return { "ML FAILED": 100 };
+      return { error: 100 };
     }
-  }
-
-  function dataURItoFile(dataURI) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    let byteString = atob(dataURI.split(",")[1]);
-
-    // separate out the mime component
-    let mimeString = dataURI
-      .split(",")[0]
-      .split(":")[1]
-      .split(";")[0];
-
-    // write the bytes of the string to an ArrayBuffer
-    let ab = new ArrayBuffer(byteString.length);
-    let ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    let file = new File([ab], "image.png", { type: mimeString });
-    return file;
   }
 
   return (
