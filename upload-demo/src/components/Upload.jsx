@@ -3,6 +3,7 @@ import "../styles/upload.css";
 import mergeImages from "merge-images";
 import extractFramesFromVideo from "../utils/image_gen";
 import dataURItoFile from "../utils/dataToURIFile";
+import postData from "../utils/postData";
 
 export default function Upload({ ipAddress, port, model }) {
   const fileReader = new FileReader();
@@ -36,34 +37,6 @@ export default function Upload({ ipAddress, port, model }) {
       });
     };
   };
-
-  /**
-   * @param {Takes in a File, which in this case is an image} data
-   *
-   * Sends data to written server, and will return its response in JSON format.
-   * This response is an object like such: {"Key":Value}
-   */
-
-  async function postData(data) {
-    let imageFile = dataURItoFile(data);
-
-    try {
-      const response = await fetch(
-        `http://3.236.97.79:8080/predictions/densenet161`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "image/jpeg"
-          },
-          body: imageFile
-        }
-      );
-
-      return await response.json();
-    } catch (error) {
-      return { error: 100 };
-    }
-  }
 
   return (
     <>

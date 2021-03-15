@@ -1,26 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import mergeImages from "merge-images";
-
-async function postData(data, ipAddress, port, model) {
-  console.log(data);
-  try {
-    const response = await fetch(
-      `http://${ipAddress}:${port}/predictions/${model}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "image/jpeg"
-        },
-        body: data
-      }
-    );
-
-    return await response.json();
-  } catch (error) {
-    alert(error);
-  }
-}
+import postData from "../utils/postData";
 
 function Form() {
   const { register, handleSubmit, errors } = useForm();
