@@ -5,6 +5,7 @@ import Upload from "./components/Upload";
 import Form from "./components/Form";
 
 export default function App() {
+  console.log(process.env.BABEL_ENV);
   return (
     <>
       <Form />

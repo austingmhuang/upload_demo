@@ -5,6 +5,8 @@ import extractFramesFromVideo from "../utils/image_gen";
 import dataURItoFile from "../utils/dataToURIFile";
 import postData from "../utils/postData";
 
+const videoshow = require("videoshow");
+
 export default function Upload({ ipAddress, port, model }) {
   const fileReader = new FileReader();
 
@@ -31,8 +33,15 @@ export default function Upload({ ipAddress, port, model }) {
         for (let i = 0; i < frames.length; i++) {
           postData(frames[i]).then(res => {
             console.log(res);
+            // mergeImage([frames[i], textImage.src]).then(do push)
           });
         }
+        videoshow(frames)
+          .save("video.mp4")
+          .on("error", () => {
+            console.log("error");
+          })
+          .on("end", () => {});
         setInputImage(frames[2]);
       });
     };
